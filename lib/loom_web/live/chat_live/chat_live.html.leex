@@ -1,0 +1,79 @@
+<div class="h-screen relative" id="loom">
+  <div class="w-full h-16 bg-gray-900 border-b-2 border-orange-800 absolute z-10">
+    <div class="font-sans text-white text-right uppercase font-extrabold align-baseline leading-none">
+      <span class="text-sm text-gray-400">Astra</span> <span class="text-6xl">loom</span>
+    </div>
+  </div>
+  <div id="stars">
+  <div class="night">
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+    <div class="shooting_star"></div>
+  </div>
+  </div>
+  <div class="flex h-full relative pt-16">
+    <div class="w-32 bg-gray-800 flex-none border-blue-800 border-r-4 border-t-1">
+      <ul>
+        <%= for {name, thread} <- @threads do %>
+          <li>
+              <a class="block border py-2 px-4 hover:bg-blue-700 text-white bg-blue-200 <%= if thread["enabled"] do %> bg-blue-500 border-blue-500 <% end %>" href="#" phx-click="thread" phx-value-name="<%= name %>">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style='color:<%= Loom.Thread.to_color("thread:" <> name) %>' stroke="currentColor" class="h-4 inline-block">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+              </svg>
+              <%= name %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="flex-grow pl-2 pt-1 overflow-auto pb-8 relative" id="messages" phx-hook="Messages">
+
+      <%= for message <- @messages do %>
+        <div class="flex w-full max-w-full mb-1" id="messages-<%= message.id %>">
+          <div class="h-16 w-16 flex bg-cover rounded-t text-center overflow-hidden" style="background-image: url('<%= message.picture %>')" title="">
+          </div>
+
+          <div class="border-r w-full border-b border-l border-gray-400 bg-opacity-75 border-l-0 border-t  bg-white rounded-b rounded-b-none rounded-r p-2 flex flex-col leading-normal relative">
+            <div class="h-full left-0 top-0 w-2 inline-block absolute" style="background-color:<%= Loom.Thread.to_color(message.thread)%>"> </div>
+            <div class="inline-block pl-2">
+            <div>
+              <span class="text-orange-800 text-xs"><%= message.user %></span>
+            </div>
+            <div>
+              <%= message.message %>
+            </div>
+            <div class="mt-2">
+              <span class="text-xs">In</span> <span class="text-xs" style="color:<%= Loom.Thread.to_color(message.thread)%>"> <%= List.last(String.split(message.thread, ":")) %> </span>
+            </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="fixed w-screen pl-32 bottom-0 box-border w-full ">
+      <div class="flex flex-wrap w-full bg-gray-600 bg-opacity-75">
+        <div class="w-full bg-gray-800 bg-opacity-75">
+          <span>Posting to:</span>
+          <%= for target <- @targets do %>
+
+            <span style='background-color:<%= Loom.Thread.to_color("thread:" <> target) %>'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"  stroke="currentColor" class="h-4 inline-block">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+              </svg><%= target %></span>
+          <% end %>
+        </div>
+        <form phx-change="validate" phx-submit="send" class="w-full flex flex-wrap">
+          <div class="w-3/4">
+              <textarea id="message" rows="2" name="message" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"><%=@message%></textarea>
+          </div>
+          <div class="w-1/4">
+              <button type="submit" class="w-full h-3/4 rshadow bg-blue-700 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" phx-disable-with="Sending...">Send</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
