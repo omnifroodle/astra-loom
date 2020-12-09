@@ -19,7 +19,7 @@ defmodule Loom.Astra.Actions.Keyspace do
   end
 
   def select(table, primary_key) do
-    {status, %{data: data }} = get("#{table}/#{primary_key}")
+    {status, %{data: _ }} = get("#{table}/#{primary_key}")
       |> parse_response
 
   end

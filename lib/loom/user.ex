@@ -6,7 +6,7 @@ defmodule Loom.User do
 
   # TODO test user object is sig
   def create(user) do
-    {:ok, user} = Loom.Astra.Actions.Namespace.create("users", user)
+    {:ok, _} = Loom.Astra.Actions.Namespace.create("users", user)
   end
 
   def get_or_create(user) do

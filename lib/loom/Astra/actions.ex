@@ -43,7 +43,7 @@ defmodule Loom.Astra.Actions do
       {"x-cassandra-request-id", UUID.uuid1()}] do
     {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
       {:ok, Jason.decode!(body, keys: :atoms)}
-    {:ok, %HTTPoison.Response{status_code: 404, body: body}} ->
+    {:ok, %HTTPoison.Response{status_code: 404, body: _}} ->
       {:ok, %{rows: []}}
     other ->
       IO.inspect other

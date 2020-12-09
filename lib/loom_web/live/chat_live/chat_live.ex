@@ -25,7 +25,7 @@ defmodule LoomWeb.ChatLive do
   end
 
   def handle_info(
-    %{event: "presence_diff", payload: %{joins: joins, leaves: leaves}},
+    %{event: "presence_diff", payload: %{joins: _joins, leaves: _leaves}},
     socket
   ) do
     {:noreply, socket}

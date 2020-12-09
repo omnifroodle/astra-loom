@@ -27,7 +27,7 @@ config :loom, Loom.Astra,
   username: System.get_env("ASTRA_USERNAME"),
   password: System.get_env("ASTRA_PASSWORD"),
   id: System.get_env("ASTRA_ID"),
-  region: "us-east1",
+  region: System.get_env("ASTRA_CLUSTER_REGION"),
   keyspace: "loom"
 
   # config guardian for access control
