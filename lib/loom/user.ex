@@ -16,7 +16,7 @@ defmodule Loom.User do
       {:miss, _} ->
         user_with_default_threads = Map.put(user, "threads", %{"main" => %{"enabled" => true}, "lobby" => %{"enabled" => true}})
         {:ok, _} = create(user_with_default_threads)
-        user_with_default_threads
+        {:ok, user_with_default_threads}
     end
   end
 end

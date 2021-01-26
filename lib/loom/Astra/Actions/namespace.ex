@@ -18,8 +18,13 @@ defmodule Loom.Astra.Actions.Namespace do
                 {"x-cassandra-request-id", UUID.uuid1()}]
   end
 
+  def process_request_options(options) do
+    options ++ [ssl: [{:versions, [:'tlsv1.2']}]]
+  end
+
   def fetch(collection, id) do
-    {status, %{data: data }} = get("#{collection}/#{id}")
+    IO.inspect @url
+    {status, %{data: data }} = get("#{URI.encode(collection)}/#{URI.encode(id)}")
       |> parse_response
     {status, data}
   end

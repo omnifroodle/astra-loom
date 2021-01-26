@@ -4,12 +4,15 @@ defmodule Loom.Astra.Actions do
 
 
   def get_token do
+    IO.inspect @url
     case HTTPoison.post "#{@url}/v1/auth",
       "{\"username\": \"#{@config[:username]}\", \"password\": \"#{@config[:password]}\"}",
       [{"Content-Type", "application/json"},
       {"accept", "*/*"},
-      {"x-cassandra-request-id", UUID.uuid1()}] do
+      {"x-cassandra-request-id", UUID.uuid1()}],
+      [ssl: [{:versions, [:'tlsv1.2']}]] do
     {:ok, %HTTPoison.Response{body: body}} ->
+      IO.inspect body
       {:ok, Jason.decode!(body)["authToken"]}
     other ->
       IO.inspect other

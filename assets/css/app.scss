@@ -1,14 +1,12 @@
 /* This file is for your main application css. */
 
 /* integrating tailwind with Phoenix: https://pragmaticstudio.com/tutorials/adding-tailwind-css-to-phoenix */
+
 @tailwind base;
 
 @tailwind components;
 
 @tailwind utilities;
-
-
-
 
 .contents {
   height: 100vh;

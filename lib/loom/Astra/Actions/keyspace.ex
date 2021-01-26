@@ -18,10 +18,13 @@ defmodule Loom.Astra.Actions.Keyspace do
                 {"x-cassandra-request-id", UUID.uuid1()}]
   end
 
+  def process_request_options(options) do
+    options ++ [ssl: [{:versions, [:'tlsv1.2']}]]
+  end
+
   def select(table, primary_key) do
     {status, %{data: _ }} = get("#{table}/#{primary_key}")
       |> parse_response
-
   end
 
   def insert(table, entity) do

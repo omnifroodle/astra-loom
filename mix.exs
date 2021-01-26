@@ -47,7 +47,7 @@ defmodule Loom.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.1"},
-      {:httpoison, "~> 1.6"},
+      {:httpoison, "~> 1.7"},
       {:elixir_uuid, "~> 1.2"},
       {:guardian, "~> 2.0"},
       {:guardian_phoenix, "~> 2.0"},

@@ -4,9 +4,9 @@ defmodule Loom.Message do
 
   def get_messages(thread) do
     {:ok, token} = Loom.Astra.TokenManager.get_token()
-    {:ok, messages} = Loom.Astra.Actions.select(token, "messages", thread)
+    {:ok, messages} = Loom.Astra.Actions.Keyspace.select("messages", thread)
     #TODO should these be coerced into Message structs?
-    messages[:rows]
+    messages[:data]
   end
 
   def insert_message(message) do
