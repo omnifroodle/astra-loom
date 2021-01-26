@@ -8,6 +8,20 @@ You'll need:
 
 Copy `example.env` to `.env` and update it with your Astra and Google creds
 
+### Add your tables to Astra
+
+In the Astr CQL console:
+```
+create table messages (
+    thread text,
+    user text,
+    id timeuuid,
+    added timestamp,
+    message text,
+    picture text,
+    primary key (thread, id, user)
+);
+```
 ## Start the server
 
 To start your Phoenix server:
