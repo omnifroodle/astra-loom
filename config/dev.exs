@@ -66,9 +66,8 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-# config :loom, Loom.Astra,
-#   username: System.get_env("ASTRA_USERNAME"),
-#   password: System.get_env("ASTRA_PASSWORD"),
-#   id: System.get_env("ASTRA_ID"),
-#   region: "us-east1",
-#   keyspace: "loom"
+config :astra,
+  id: System.get_env("ASTRA_ID"),
+  region: System.get_env("ASTRA_REGION"),
+  username: System.get_env("ASTRA_USERNAME"),
+  password: System.get_env("ASTRA_PASSWORD")

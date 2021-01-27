@@ -23,14 +23,13 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :loom, Loom.Astra,
-  username: System.get_env("ASTRA_USERNAME"),
-  password: System.get_env("ASTRA_PASSWORD"),
+config :astra,
   id: System.get_env("ASTRA_ID"),
-  region: System.get_env("ASTRA_CLUSTER_REGION"),
-  keyspace: "loom"
-
-  # config guardian for access control
+  region: System.get_env("ASTRA_REGION"),
+  username: System.get_env("ASTRA_USERNAME"),
+  password: System.get_env("ASTRA_PASSWORD")
+  
+# config guardian for access control
 config :loom, Loom.Guardian,
   issuer: "loom",
   secret_key: "pLlmfXjzIFR03xdl14anxVcy0rOxp3HiiYUVCtmj38eUavJt8PfaawBlDFPG9l7j"

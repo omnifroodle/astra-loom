@@ -11,12 +11,11 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
-config :loom, Loom.Astra,
-  username: System.get_env("ASTRA_USERNAME"),
-  password: System.get_env("ASTRA_PASSWORD"),
+config :astra,
   id: System.get_env("ASTRA_ID"),
-  region: "us-east1",
-  keyspace: "loom"
+  region: System.get_env("ASTRA_REGION"),
+  username: System.get_env("ASTRA_USERNAME"),
+  password: System.get_env("ASTRA_PASSWORD")
 
 config :loom, :strategies,
   google: [

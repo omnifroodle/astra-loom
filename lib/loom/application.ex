@@ -13,8 +13,7 @@ defmodule Loom.Application do
       # Start the endpoint when the application starts
       LoomWeb.Endpoint,
       LoomWeb.Presence,
-      LoomWeb.Telemetry,
-      Loom.Astra.TokenManager
+      LoomWeb.Telemetry
       # Starts a worker by calling: Loom.Worker.start_link(arg)
       # {Loom.Worker, arg},
     ]
