@@ -6,20 +6,19 @@ defmodule Loom.User do
 
   # TODO test user object is sig
   def create(user) do
-    # {:ok, _} = Loom.Astra.Actions.Namespace.create("users", user)
-    # {:ok, _} = Astra.Document.
+    {:ok, _} = Astra.Document.put_doc("loom", "users", user["sub"], user)
 
   end
 
   def get_or_create(user) do
     case get(user["sub"]) do
-      {:ok, ret} ->
-        {:ok, ret}
-      {:miss, _} ->
+      {:ok, []} ->
         IO.inspect user
         user_with_default_threads = Map.put(user, "threads", %{"main" => %{"enabled" => true}, "lobby" => %{"enabled" => true}})
         {:ok, _} = create(user_with_default_threads)
         {:ok, user_with_default_threads}
+      {:ok, ret} ->
+        {:ok, ret}
     end
   end
 end

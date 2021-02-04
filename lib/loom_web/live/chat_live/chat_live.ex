@@ -33,13 +33,15 @@ defmodule LoomWeb.ChatLive do
 
   def handle_event("send", payload, socket) do
     message = %Loom.Message{
-      thread: "thread:lobby",
+      other_threads: Enum.map(socket.assigns.targets, &("t:#{&1}")), # t for topic, more to come
       user: socket.assigns[:resource]["name"],
       message: payload["message"],
       picture: socket.assigns[:resource]["picture"]
     }
-    {:ok, saved_message} = Loom.Message.insert_message(message)
-    LoomWeb.Endpoint.broadcast("thread:lobby", "shout", saved_message)
+    {:ok, saved_messages} = Loom.Message.insert_message(message)
+    for thread <- saved_messages.other_threads do
+      LoomWeb.Endpoint.broadcast(thread, "shout", message)
+    end
     {:noreply, socket}
   end
 
@@ -50,7 +52,6 @@ defmodule LoomWeb.ChatLive do
       other ->
         Enum.map(other, &List.last(&1))
     end
-    IO.inspect tags
     {:noreply, assign(socket, targets: tags)}
   end
 
@@ -68,7 +69,7 @@ defmodule LoomWeb.ChatLive do
 
   defp thread_changed({name, enabled = true}, socket) do
     # other prefixes may be used later, such as 'user:'
-    full_name = "thread:" <> name
+    full_name = "t:" <> name
     resource = socket.assigns[:resource]
     LoomWeb.Endpoint.subscribe(full_name)
     presence_info = %{
@@ -84,8 +85,8 @@ defmodule LoomWeb.ChatLive do
       presence_info
     )
     Loom.Message.get_messages(full_name)
-    messages = socket.assigns[:messages] ++ Loom.Message.get_messages(full_name) |>
-      Enum.sort(&(&1.added < &2.added))
+    messages = socket.assigns[:messages] ++ Loom.Message.get_messages(full_name)
+      |> Enum.sort(&(&1.added < &2.added))
 
 
     #Loom.Thread.update_thread_by_person(resource, name, true)
@@ -93,7 +94,7 @@ defmodule LoomWeb.ChatLive do
   end
 
   defp thread_changed({name, enabled = false}, socket) do
-    full_name = "thread:" <> name
+    full_name = "t:" <> name
     Presence.untrack(self(), full_name, socket.id)
     LoomWeb.Endpoint.unsubscribe(full_name)
     messages = Enum.filter(socket.assigns[:messages], &(&1.thread != full_name))

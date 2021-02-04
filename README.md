@@ -14,6 +14,7 @@ In the Astr CQL console:
 ```
 create table messages (
     thread text,
+    other_threads frozen<set<text>>,
     user text,
     id timeuuid,
     added timestamp,

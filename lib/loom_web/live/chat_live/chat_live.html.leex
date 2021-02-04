@@ -1,21 +1,11 @@
-<div class="h-screen relative" id="loom">
+<div class="h-screen relative bg-gray-400" id="loom">
   <div class="w-full h-16 bg-gray-900 border-b-2 border-orange-800 absolute z-10">
     <div class="font-sans text-white text-right uppercase font-extrabold align-baseline leading-none">
       <span class="text-sm text-gray-400">Astra</span> <span class="text-6xl">loom</span>
     </div>
   </div>
-  <div id="stars">
-  <div class="night">
-    <div class="shooting_star"></div>
-    <div class="shooting_star"></div>
-    <div class="shooting_star"></div>
-    <div class="shooting_star"></div>
-    <div class="shooting_star"></div>
-    <div class="shooting_star"></div>
-  </div>
-  </div>
   <div class="flex h-full relative pt-16">
-    <div class="w-32 bg-gray-800 flex-none border-blue-800 border-r-4 border-t-1">
+    <div class="w-32 bg-gray-200 flex-none border-blue-800 border-r-4 border-t-1">
       <ul>
         <%= for {name, thread} <- @threads do %>
           <li>
@@ -32,7 +22,7 @@
     <div class="flex-grow pl-2 pt-1 overflow-auto pb-8 relative" id="messages" phx-hook="Messages">
 
       <%= for message <- @messages do %>
-        <div class="flex w-full max-w-full mb-1" id="messages-<%= message.id %>">
+        <div class="flex w-full max-w-full mb-1" id="messages-<%= message.id %>-<%= message.thread %>">
           <div class="h-16 w-16 flex bg-cover rounded-t text-center overflow-hidden" style="background-image: url('<%= message.picture %>')" title="">
           </div>
 
@@ -46,7 +36,10 @@
               <%= message.message %>
             </div>
             <div class="mt-2">
-              <span class="text-xs">In</span> <span class="text-xs" style="color:<%= Loom.Thread.to_color(message.thread)%>"> <%= List.last(String.split(message.thread, ":")) %> </span>
+              <span class="text-xs">In</span>
+              <%= for thread <- message.other_threads do %>
+                <span class="text-xs" style="color:<%= Loom.Thread.to_color(thread)%>"> <%= List.last(String.split(thread, ":")) %> </span>
+              <% end %>
             </div>
             </div>
           </div>
@@ -55,7 +48,7 @@
     </div>
     <div class="fixed w-screen pl-32 bottom-0 box-border w-full ">
       <div class="flex flex-wrap w-full bg-gray-600 bg-opacity-75">
-        <div class="w-full bg-gray-800 bg-opacity-75">
+        <div class="w-full bg-gray-200 bg-opacity-75">
           <span>Posting to:</span>
           <%= for target <- @targets do %>
 
