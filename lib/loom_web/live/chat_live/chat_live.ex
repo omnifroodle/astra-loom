@@ -83,7 +83,6 @@ defmodule LoomWeb.ChatLive do
       socket.id,
       presence_info
     )
-    Loom.Message.get_messages(full_name)
     messages = socket.assigns[:messages] ++ Loom.Message.get_messages(full_name) |>
       Enum.sort(&(&1.added < &2.added))
 

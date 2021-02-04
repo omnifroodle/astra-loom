@@ -52,7 +52,8 @@ defmodule Loom.MixProject do
       {:guardian, "~> 2.0"},
       {:guardian_phoenix, "~> 2.0"},
       {:html_sanitize_ex, "~> 1.3.0-rc3"},
-      {:astra, "~> 0.1"}
+      {:astra, "~> 0.1"},
+      {:poison, "~> 4.0"}
     ]
   end
 end

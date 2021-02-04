@@ -5,7 +5,7 @@ defmodule Loom.Message do
   def get_messages(thread) do
     {:ok, messages} = Astra.Rest.get_row("loom", "messages", thread)
     #TODO should these be coerced into Message structs?
-    messages[:data]
+    messages
   end
 
   def insert_message(message) do
