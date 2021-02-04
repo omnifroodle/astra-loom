@@ -8,6 +8,11 @@
 
 @tailwind utilities;
 
+body {
+  background-color: #88a1db;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='105' viewBox='0 0 80 105'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='death-star' fill='%23ffffff' fill-opacity='0.29'%3E%3Cpath d='M20 10a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm15 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zM20 75a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zm30-65a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm0 65a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zM35 10a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zM5 45a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zm60 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
 .contents {
   height: 100vh;
   overflow: hidden;
@@ -42,119 +47,3 @@
   font-weight: lighter;
   font-size: smaller;
 }
-
-/* shooting stars thanks to: bg-opacity-75*/
-#loom {
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-}
-
-$shooting-time: 3000ms;
-
-#stars {
-  position: absolute;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-}
-.night {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  transform: rotateZ(45deg);
-  bottom: -30%;
-  right: -30%;
-}
-
-.shooting_star {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 2px;
-  background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
-  border-radius: 999px;
-  filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
-  animation:
-    tail $shooting-time ease-in-out infinite,
-    shooting $shooting-time ease-in-out infinite;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: calc(50% - 1px);
-    right: 0;
-    height: 2px;
-    background: linear-gradient(-45deg, rgba(0, 0, 255, 0), rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
-    transform: translateX(50%) rotateZ(45deg);
-    border-radius: 100%;
-    animation: shining $shooting-time ease-in-out infinite;
-  }
-
-  &::after {
-    @extend .shooting_star::before;
-    transform: translateX(50%) rotateZ(-45deg);
-  }
-  
-  @for $i from 1 through 20 {
-    &:nth-child(#{$i}) {
-      $delay: random(9999) + 0ms;
-      top: calc(50% - #{random(400) - 200px});
-      left: calc(50% - #{random(300) + 0px});
-      animation-delay: $delay;
-      
-      &::before,
-      &::after {
-        animation-delay: $delay;
-      }
-    }
-  }
-}
-
-@keyframes tail {
-  0% {
-    width: 0;
-  }
-  
-  30% {
-    width: 100px;
-  }
-  
-  100% {
-    width: 0;
-  }
-}
-
-@keyframes shining {
-  0% {
-    width: 0;
-  }
-  
-  50% {
-    width: 30px;
-  }
-  
-  100% {
-    width: 0;
-  }
-}
-
-@keyframes shooting {
-  0% {
-    transform: translateX(0);
-  }
-  
-  100% {
-    transform: translateX(300px);
-  }
-}
-
-@keyframes sky {
-  0% {
-    transform: rotate(45deg);
-  }
-  
-  100% {
-    transform: rotate(45 + 360deg);
-  }
-}
-
-/* end shooting stars thanks to: bg-opacity-75*/
