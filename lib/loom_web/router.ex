@@ -30,6 +30,10 @@ defmodule LoomWeb.Router do
     pipe_through [:browser, :auth]
 
     get "/", PageController, :index
+    
+    if Application.get_env(:loom, :dev_login) do
+      get "/auth/dev/callback", DevAuthController, :index
+    end
     get "/auth/google/callback", GoogleAuthController, :index
     live_dashboard "/dashboard", metrics: LoomWeb.Telemetry
   end

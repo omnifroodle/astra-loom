@@ -4,21 +4,28 @@ defmodule Loom.User do
     Astra.Document.get_doc("loom", "users", id)
   end
 
-  # TODO test user object is sig
   def create(user) do
-    {:ok, _} = Astra.Document.put_doc("loom", "users", user["sub"], user)
-
+    {:ok, user} = Astra.Document.put_doc("loom", "users", user["sub"], user)
   end
 
   def get_or_create(user) do
     case get(user["sub"]) do
       {:ok, []} ->
-        IO.inspect user
-        user_with_default_threads = Map.put(user, "threads", %{"main" => %{"enabled" => true}, "lobby" => %{"enabled" => true}})
+        user_with_default_threads = Map.put(user, "threads", %{
+                "main" => %{"enabled" => true},
+                "lobby" => %{"enabled" => true}
+                })
+
+
+                IO.puts("user with def threads")
+                IO.inspect user_with_default_threads
         {:ok, _} = create(user_with_default_threads)
         {:ok, user_with_default_threads}
       {:ok, ret} ->
+        IO.puts "Ret"
+        IO.inspect ret
         {:ok, ret}
+
     end
   end
 end
