@@ -3,7 +3,6 @@ defmodule Loom.RandomUser do
   
   def get() do
     response = HTTPoison.get!("https://randomuser.me/api/")
-    IO.inspect response.body
     {:ok, result} = Poison.decode(response.body, %{keys: :atoms})
     [faker | _] = result.results
     uuid = UUID.uuid1()
