@@ -2,8 +2,8 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: 'echo "TODO: Replace with init/build command"'
-    command: 'echo "TODO: Replace with command to start project"'
+  - init: 'mix deps.get'
+    command: 'source gitpod_env.sh; mix phx.server'
 
 vscode:
   extensions:
