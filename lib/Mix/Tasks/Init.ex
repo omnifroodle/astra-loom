@@ -34,11 +34,7 @@ defmodule Mix.Tasks.Loom.Init do
     check_for_keyspace(keyspace)
     check_for_messages_table(keyspace, "messages")
     create_users_collection(keyspace)
-    
-    #IO.inspect Astra.Schema.Rest.get_tables(keyspace)
-    #IO.inspect Astra.Schema.Rest.get_table(keyspace, "messages")
-    #IO.puts "here"
-    
+
   end
   
   def check_for_keyspace(keyspace) do
