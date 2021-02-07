@@ -57,13 +57,17 @@ defmodule LoomWeb.ChatLive do
 
   def handle_event("thread", event, socket) do
     threads = socket.assigns[:threads]
+    resource = socket.assigns[:resource]
     thread = threads[event["name"]]
 
     # update messages if needed
     socket = {event["name"], !thread["enabled"] } |>
       thread_changed(socket)
+      
+    Loom.User.update_thread(resource["sub"], event["name"], !thread["enabled"])
+    
     # prep the new threads list to add back to the socket
-    threads = put_in(threads, [event["name"], "enabled"], !thread["enabled"])
+    threads = Map.put(threads, event["name"], %{"enabled" => !thread["enabled"]})
     {:noreply, assign(socket, threads: threads)}
   end
 
