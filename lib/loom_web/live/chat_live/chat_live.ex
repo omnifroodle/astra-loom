@@ -3,27 +3,34 @@ defmodule LoomWeb.ChatLive do
   alias LoomWeb.Presence
 
   def mount(_params, session, socket) do
+    # grab the user's information from the session
     {:ok, resource, _} = Loom.Guardian.resource_from_token(session["guardian_default_token"])
-    #threads = Loom.Thread.get_by_person(resource["sub"])
+    # pull the users thread settings
     threads = resource["threads"]
-    socket = assign(socket, resource: resource, threads: threads, messages: [], targets: ["lobby"])
-
-    socket = if connected?(socket) do
-      Enum.reduce(threads, socket, fn {name, %{"enabled" => enabled}}, soc ->
+    
+    # if we don't have messages, lets load them.
+    # Reminder that mount is called twice and we only want to do this once.
+    socket = if !Map.has_key?(socket, :messages) do
+      socket = assign(socket, messages: [])
+      socket = Enum.reduce(threads, socket, fn {name, %{"enabled" => enabled}}, soc ->
         thread_changed({name, enabled}, soc)
       end)
-    else
-      socket
     end
-
-    # TODO consider temporary_assigns here?  that could be tricky if we support joining multiple threads
-    {:ok, assign(socket, message: "")}
+    
+    {:ok, assign(socket, 
+                  message: "",
+                  resource: resource,
+                  threads: threads,
+                  targets: ["lobby"]
+                )}
   end
 
+  # handle a new message sent from another web session
   def handle_info(%{payload: %{message: _} = payload}, socket) do
-    {:noreply, assign(socket, messages: socket.assigns[:messages] ++ [payload])}
+    {:noreply, assign(socket, messages: sort_messages(socket.assigns[:messages] ++ [payload]))}
   end
 
+  # handle a person actively watching of ignoring a thread
   def handle_info(
     %{event: "presence_diff", payload: %{joins: _joins, leaves: _leaves}},
     socket
@@ -31,6 +38,7 @@ defmodule LoomWeb.ChatLive do
     {:noreply, socket}
   end
 
+  # handle a submitting a message to a thread
   def handle_event("send", payload, socket) do
     message = %Loom.Message{
       other_threads: Enum.map(socket.assigns.targets, &("t:#{&1}")), # t for topic, more to come
@@ -45,6 +53,7 @@ defmodule LoomWeb.ChatLive do
     {:noreply, socket}
   end
 
+  # handle message validate as it is typed
   def handle_event("validate", %{"message" => message}, socket) do
     tags = case Regex.scan(~r/#(\w+)/, message) do
       [] ->
@@ -55,6 +64,7 @@ defmodule LoomWeb.ChatLive do
     {:noreply, assign(socket, targets: tags)}
   end
 
+  # handle a change to a thread (active/de-activated)
   def handle_event("thread", event, socket) do
     threads = socket.assigns[:threads]
     resource = socket.assigns[:resource]
@@ -89,11 +99,10 @@ defmodule LoomWeb.ChatLive do
       presence_info
     )
     messages = socket.assigns[:messages] ++ Loom.Message.get_messages(full_name)
-      |> Enum.sort(&(&1.added < &2.added))
 
 
     #Loom.Thread.update_thread_by_person(resource, name, true)
-    assign(socket, messages: messages)
+    assign(socket, messages: sort_messages(messages))
   end
 
   defp thread_changed({name, enabled = false}, socket) do
@@ -103,6 +112,12 @@ defmodule LoomWeb.ChatLive do
     messages = Enum.filter(socket.assigns[:messages], &(&1.thread != full_name))
 
     #Loom.Thread.update_thread_by_person(socket.assigns[:resource]["sub"], thread)
-    assign(socket, messages: messages)
+    assign(socket, messages: sort_messages(messages))
+  end
+  
+  defp sort_messages(messages) do
+    messages
+      |> Enum.sort(&(&1.added < &2.added))
+      |> Enum.uniq_by(&(&1.id))
   end
 end
