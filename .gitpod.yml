@@ -8,9 +8,8 @@ ports:
 tasks:
   - init: 'mix deps.get && npm install --prefix ./assets/ && source gitpod_env.sh'
     command: 'source gitpod_env.sh && mix phx.server'
-    openMode: split-right
   - command: 'echo "if this is a new project please run mix loom.init"'
-    openIn: left
+    openMode: split-right
 
 vscode:
   extensions:
