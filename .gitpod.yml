@@ -1,8 +1,12 @@
 image:
   file: .gitpod.Dockerfile
 
+ports:
+  - port: 4000
+    onOpen: open-browser
+
 tasks:
-  - init: 'mix deps.get'
+  - init: 'mix deps.get; cd assets && npm install'
     command: 'source gitpod_env.sh; mix phx.server'
 
 vscode:
