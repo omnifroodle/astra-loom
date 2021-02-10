@@ -8,7 +8,7 @@ ports:
 tasks:
   - init: 'mix deps.get && npm install --prefix ./assets/ && source gitpod_env.sh'
     command: 'source gitpod_env.sh && mix phx.server'
-  - command: 'echo "if this is a new project please run mix loom.init"'
+  - command: 'echo "if this is a new project please run mix loom.init when other setup finishes"'
     openMode: split-right
 
 vscode:
