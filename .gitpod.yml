@@ -7,7 +7,7 @@ ports:
 
 tasks:
   - init: 'mix deps.get && npm install --prefix ./assets/ && source gitpod_env.sh'
-  - command: 'source gitpod_env.sh; mix phx.server'
+  - command: 'mix deps.get && source gitpod_env.sh && mix phx.server'
     openMode: split-right
 
 vscode:
