@@ -23,7 +23,7 @@
     <div class="flex-grow overflow-auto relative" id="messages" phx-hook="Messages">
 
       <%= for message <- @messages do %>
-        <div class="flex w-full max-w-full mb-1" id="messages-<%= message.id %>-<%= message.thread %>">
+        <div class="flex w-full max-w-full mb-1 <%= if show_message?(message, @threads) do %>hidden <% end %>" id="messages-<%= message.id %>">
           <div class="h-16 w-16 flex bg-cover rounded-t text-center overflow-hidden" style="background-image: url('<%= message.picture %>')" title="">
           </div>
 

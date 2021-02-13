@@ -14,4 +14,12 @@ defmodule Loom.Thread do
     "hsl(#{hue}, #{saturation}, #{lightness})"
   end
 
+    
+  def update_thread(user_id, thread, enabled) do
+    {:ok, _} = Astra.Document.put_sub_doc("loom", "users", user_id, "threads/#{thread}", %{"enabled" => enabled})
+  end
+  
+  def get_threads(user_id) do
+    Astra.Document.get_sub_doc("loom", "users", user_id, "threads")
+  end
 end
