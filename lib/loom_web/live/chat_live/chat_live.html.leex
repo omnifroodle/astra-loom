@@ -4,7 +4,7 @@
       <span class="text-sm text-gray-400">Astra</span><br/> <span class="text-6xl">loom</span>
     </div>
     <div class="bg-gray-800">
-      <span class="text-sm text-gray-400 text-2xl uppercase text-right">My threads</span> 
+      <span class="text-sm text-gray-400 text-2xl uppercase text-right">My threads</span>
     </div>
     <ul class="overflow-auto">
       <%= for {name, thread} <- @threads do %>
@@ -23,7 +23,7 @@
     <div class="flex-grow overflow-auto relative" id="messages" phx-hook="Messages">
 
       <%= for message <- @messages do %>
-        <div class="flex w-full max-w-full mb-1 <%= if show_message?(message, @threads) do %>hidden <% end %>" id="messages-<%= message.id %>">
+        <div class="flex w-full max-w-full mb-1 <%= if !show_message?(message, @threads) do %>hidden <% end %>" id="messages-<%= message.id %>">
           <div class="h-16 w-16 flex bg-cover rounded-t text-center overflow-hidden" style="background-image: url('<%= message.picture %>')" title="">
           </div>
 
@@ -64,16 +64,7 @@
             <button type="submit" class="w-full h-16 rshadow bg-blue-700 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold rounded" phx-disable-with="Sending...">Send</button>
           </div>
         </form>
-    
+
     </div>
   </div>
 </div>
-      
-    
-    
-    
-
-  
-  
-    
-

@@ -7,7 +7,7 @@ defmodule LoomWeb.ChatLive do
     {:ok, resource, _} = Loom.Guardian.resource_from_token(session["guardian_default_token"])
     # pull the users thread settings
     {:ok, threads} = Loom.Thread.get_threads(resource["sub"])
-    
+
     # if we don't have messages yet, lets load them.
     # Reminder that mount is called twice and we only want to do this once.
     socket = if !Map.has_key?(socket, :messages) do
@@ -16,8 +16,8 @@ defmodule LoomWeb.ChatLive do
         watch_thread(name, soc, nil)
       end)
     end
-    
-    {:ok, assign(socket, 
+
+    {:ok, assign(socket,
                   message: "",
                   resource: resource,
                   threads: threads,
@@ -69,27 +69,27 @@ defmodule LoomWeb.ChatLive do
     threads = socket.assigns[:threads]
     resource = socket.assigns[:resource]
     thread = threads[event["name"]]
-          
+
     socket = watch_thread(event["name"], socket, thread)
     {:ok, _ } = Loom.Thread.update_thread(resource["sub"], event["name"], !thread["enabled"])
-    
+
     # prep the new threads list to add back to the socket
     threads = Map.put(threads, event["name"], %{"enabled" => !thread["enabled"]})
     {:noreply, assign(socket, threads: threads)}
   end
-  
+
   # used by the view to decide if a message should be visiable in the DOM
   def show_message?(message, threads) do
-    active_threads = Enum.reject(threads, fn {_, x} -> Map.get(x, "enabled") end)
+    active_threads = Enum.reject(threads, fn {_, x} -> Map.get(x, "enabled") == false end)
                     |> Enum.map(fn { y, _} -> "t:" <> y end)
     intersection = message.other_threads -- active_threads
     intersection != message.other_threads
   end
-  
+
   defp watch_thread(name, socket, _ = nil) do
     full_name = "t:" <> name
     resource = socket.assigns[:resource]
-    
+
     # start listening for updates on the thread
     LoomWeb.Endpoint.subscribe(full_name)
     presence_info = %{
@@ -99,15 +99,13 @@ defmodule LoomWeb.ChatLive do
       picture: resource["picture"]
     }
     Presence.track(self(), full_name, socket.id, presence_info)
-    
+
     messages = socket.assigns[:messages] ++ Loom.Message.get_messages(full_name)
     assign(socket, messages: sort_messages(messages))
   end
   defp watch_thread(_, s, _), do: s
-  
+
   defp sort_messages(messages) do
-    #TODO figure out how to hide messages that don't match an active thread
-    # maybe just take a socket with messages and re-assign them sorted?
     messages
       |> Enum.sort(&(&1.added < &2.added))
       |> Enum.uniq_by(&(&1.id))
