@@ -35,6 +35,9 @@ mix loom.init
 
 Click "Random Dev User" to login with a random identity and look around.
 
+## Docker
+
+See https://hub.docker.com/repository/docker/omnifroodle/astra-loom for information about launching the astra-loom docker container.
 
 ## Running localy
 Copy `example.env` to `.env` and update it with your Astra and Google credentials.
