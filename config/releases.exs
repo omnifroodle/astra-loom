@@ -11,6 +11,9 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
+config :loom,
+    dev_login: System.get_env("ASTRA_FAKE_AUTH", "false") == "true"
+
 config :astra,
   id: System.get_env("ASTRA_ID"),
   region: System.get_env("ASTRA_REGION"),
@@ -25,15 +28,15 @@ config :loom, :strategies,
 
 config :loom, LoomWeb.Endpoint,
   http: [:inet6, port: String.to_integer(System.get_env("PORT") || "80")],
-  secret_key_base: secret_key_base,
-  https: [
-    port: String.to_integer(System.get_env("SSL_PORT") || "443"),
-    cipher_suite: :strong,
-    otp_app: :loom,
-    keyfile: System.get_env("LOOM_SSL_KEY_PATH"),
-    certfile: System.get_env("LOOM_SSL_CERT_PATH"),
-    cacertfile: System.get_env("LOOM_SSL_CA_CERT_PATH")
-  ]
+  secret_key_base: secret_key_base #,
+  # https: [
+  #   port: String.to_integer(System.get_env("SSL_PORT") || "443"),
+  #   cipher_suite: :strong,
+  #   otp_app: :loom,
+  #   keyfile: System.get_env("LOOM_SSL_KEY_PATH"),
+  #   certfile: System.get_env("LOOM_SSL_CERT_PATH"),
+  #   cacertfile: System.get_env("LOOM_SSL_CA_CERT_PATH")
+  # ]
 
 # ## Using releases (Elixir v1.9+)
 #
