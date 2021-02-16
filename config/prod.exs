@@ -10,7 +10,6 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :loom, LoomWeb.Endpoint,
-  url: [host: "froodle.ddns.net"],
   cache_static_manifest: "priv/static/cache_manifest.json",
   http: [port: {:system, "PORT"}]
 
@@ -56,24 +55,6 @@ config :logger, level: :info
 # although such is generally not recommended and you have to
 # remember to add this file to your .gitignore.
 
-secret_key_base =
-  System.get_env("SECRET_KEY_BASE") ||
-    raise """
-    environment variable SECRET_KEY_BASE is missing.
-    You can generate one by calling: mix phx.gen.secret
-    """
-
-config :loom, LoomWeb.Endpoint,
-  http: [:inet6, port: String.to_integer(System.get_env("PORT") || "80")],
-  secret_key_base: secret_key_base,
-  https: [
-    port: String.to_integer(System.get_env("SSL_PORT") || "443"),
-    cipher_suite: :strong,
-    otp_app: :loom,
-    keyfile: System.get_env("LOOM_SSL_KEY_PATH"),
-    certfile: System.get_env("LOOM_SSL_CERT_PATH"),
-    cacertfile: System.get_env("LOOM_SSL_CA_CERT_PATH")
-  ]
 
 # ## Using releases (Elixir v1.9+)
 #
